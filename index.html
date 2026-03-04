@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Minha Preta ❤️</title>
+    <!-- Correção do link Foundation -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net">
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff85a1;
+            --accent: #ffb3c1;
+            --glass: rgba(255, 255, 255, 0.85);
+        }
+
+        body {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            color: #590d22;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* Carrossel Híbrido (Foto e Vídeo) */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 400px; /* Aumentei um pouco para vídeos */
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin-bottom: 25px;
+            border: 6px solid white;
+            background: #000;
+        }
+        .carousel-item {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .carousel-item.active { opacity: 1; }
+
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 25px 0; }
+        .timer-item { background: white; padding: 10px; border-radius: 15px; border-bottom: 4px solid var(--primary); }
+        .timer-num { font-size: 1.4rem; font-weight: 900; color: var(--primary); display: block; }
+        .timer-label { font-size: 0.7rem; text-transform: uppercase; }
+
+        .music-pill {
+            background: white;
+            color: var(--primary) !important;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            margin: 6px 0;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .music-pill:hover { background: var(--primary); color: white !important; }
+
+        .heart-beat { font-size: 50px; animation: beat 0.8s infinite alternate; display: inline-block; }
+        @keyframes beat { to { transform: scale(1.2); } }
+        
+        .floating-heart { position: fixed; pointer-events: none; z-index: 100; animation: floatUp 4s linear forwards; }
+        @keyframes floatUp { to { transform: translateY(-100vh) rotate(20deg); opacity: 0; } }
+
+        .btn-nao { position: absolute; transition: 0.15s; z-index: 99; }
+    </style>
+</head>
+<body>
+
+    <div class="grid-container">
+        <div class="glass-card">
+            <div class="heart-beat">💖</div>
+            <h1>Nossa Eternidade</h1>
+
+            <!-- Carrossel de 12 Itens (6 fotos + 6 vídeos) -->
+            <div class="carousel-container" id="carousel"></div>
+
+            <div class="timer-grid">
+                <div class="timer-item"><span class="timer-num" id="d">0</span><span class="timer-label">Dias</span></div>
+                <div class="timer-item"><span class="timer-num" id="h">0</span><span class="timer-label">Horas</span></div>
+                <div class="timer-item"><span class="timer-num" id="m">0</span><span class="timer-label">Mins</span></div>
+                <div class="timer-item"><span class="timer-num" id="s">0</span><span class="timer-label">Segs</span></div>
+            </div>
+
+            <p><i>"Você é o commit mais importante da minha vida."</i></p>
+
+            <div class="grid-x grid-margin-x">
+                <div class="cell small-12">
+                    <a href="https://www.youtube.com/watch?v=0VGjV8Suyvg&list=RD0VGjV8Suyvg&start_radio=1" target="_blank" class="button expanded music-pill">🎵 Do for love</a>
+                    <a href="https://youtu.be/SJ_q_QnfINo?si=EReuqnMLQzRi6-Xd" target="_blank" class="button expanded music-pill">🐻 Ela é gostosa pra caralho</a>
+                    <a href="https://www.youtube.com/watch?v=kklBRZHWfYg&list=RDkklBRZHWfYg&start_radio=1" target="_blank" class="button expanded music-pill"> ❤️ Dangerously In Love</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; position: relative; height: 120px;">
+                <h4>Aceita continuar continuar a vida comigo?</h4>
+                <button class="button success large rounded" onclick="vitoria()" style="border-radius: 50px; width: 120px;">SIM!</button>
+                <button class="button alert large rounded btn-nao" id="btnNao" onmouseover="foge()" style="border-radius: 50px; width: 120px;">NÃO</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dataNamoro = new Date(2025, 10, 30); // 30 de Novembro (Mês 10 no JS)
+
+        // LISTA DE MÍDIAS (Adicione seus arquivos aqui)
+        const midias = [
+            'img/foto1.jpg', 'img/foto2.jpg', 'img/foto3.jpg', 
+            'img/foto4.jpg', 'img/foto5.jpg', 'img/foto6.jpg',
+            'img/video1.mp4', 'img/video2.mp4', 'img/video3.mp4',
+            'img/video4.mp4', 'img/video5.mp4', 'img/video6.mp4'
+        ];
+
+        const carousel = document.getElementById('carousel');
+
+        // Função para criar elementos de imagem ou vídeo
+        midias.forEach((src, index) => {
+            const isVideo = src.endsWith('.mp4') || src.endsWith('.mov');
+            let el;
+
+            if (isVideo) {
+                el = document.createElement('video');
+                el.src = src;
+                el.muted = true;
+                el.loop = true;
+                el.playsInline = true; // Importante para iOS
+            } else {
+                el = document.createElement('img');
+                el.src = src;
+            }
+
+            el.className = `carousel-item ${index === 0 ? 'active' : ''}`;
+            carousel.appendChild(el);
+        });
+
+        // Lógica de Troca
+        let atual = 0;
+        setInterval(() => {
+            const itens = document.querySelectorAll('.carousel-item');
+            itens[atual].classList.remove('active');
+            if (itens[atual].tagName === 'VIDEO') itens[atual].pause();
+
+            atual = (atual + 1) % itens.length;
+            
+            itens[atual].classList.add('active');
+            if (itens[atual].tagName === 'VIDEO') itens[atual].play();
+        }, 4000);
+
+        // Contador e Outros
+        function atualizarContador() {
+            const diff = new Date() - dataNamoro;
+            document.getElementById('d').innerText = Math.floor(diff / 86400000);
+            document.getElementById('h').innerText = Math.floor((diff / 3600000) % 24);
+            document.getElementById('m').innerText = Math.floor((diff / 60000) % 60);
+            document.getElementById('s').innerText = Math.floor((diff / 1000) % 60);
+        }
+        setInterval(atualizarContador, 1000);
+
+        function foge() {
+            const btn = document.getElementById('btnNao');
+            btn.style.left = Math.random() * (window.innerWidth - 150) + 'px';
+            btn.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+        }
+
+        function vitoria() {
+            alert("A escolha certa! Te amo infinitamente! ❤️");
+        }
+
+        function spawnHeart() {
+            const h = document.createElement('div');
+            h.className = 'floating-heart';
+            h.innerHTML = ['❤️','💖','✨'][Math.floor(Math.random()*3)];
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.top = '100vh';
+            h.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 4000);
+        }
+        setInterval(spawnHeart, 400);
+    </script>
+</body>
+</html>
