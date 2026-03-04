@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net">
     <style>
         :root {
-            --primary: #ff4d6d;
-            --secondary: #ff85a1;
-            --accent: #ffb3c1;
+            --primary: #03039e;
+            --secondary: #ff0303;
+            --accent: #64008f;
             --glass: rgba(255, 255, 255, 0.85);
         }
 
         body {
-            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            background: linear-gradient(45deg, hwb(298 47% 15%) 0%, #ff0000 99%, #ff0000 100%);
             min-height: 100vh;
             font-family: 'Segoe UI', sans-serif;
             color: #590d22;
@@ -37,9 +37,8 @@
         /* Carrossel Híbrido (Foto e Vídeo) */
         .carousel-container {
             position: relative;
-            width: 100%;
-            height: 400px; /* Aumentei um pouco para vídeos */
-            border-radius: 20px;
+            width: 100%
+            border-radius 20px;
             overflow: hidden;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             margin-bottom: 25px;
@@ -87,7 +86,7 @@
     <div class="grid-container">
         <div class="glass-card">
             <div class="heart-beat">💖</div>
-            <h1>Nossa Eternidade</h1>
+            <h1>Nosso sei lá! 💖</h1>
 
             <!-- Carrossel de 12 Itens (6 fotos + 6 vídeos) -->
             <div class="carousel-container" id="carousel"></div>
@@ -180,7 +179,7 @@
         }
 
         function vitoria() {
-            alert("A escolha certa! Te amo infinitamente! ❤️");
+            alert("A escolha certa! Amém! ❤️");
         }
 
         function spawnHeart() {
